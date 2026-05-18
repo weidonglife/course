@@ -27,8 +27,18 @@
 
         if (isInstagram || isFacebook) {
             // IG 環境：絕對不載入 Google，避免噴出 UNDEFINED
-            document.body.style.cssText = "padding:50px 20px; text-align:center; font-family:sans-serif; background:#FFF5F7;";
-            document.body.innerHTML = "<h3>系統連線提醒</h3>請點擊右上角「● ● ●」<br>並選擇<strong>「在瀏覽器中開啟」</strong>以進行預約。";
+            document.body.style.cssText = "padding:70px 24px; text-align:center; font-family:sans-serif; background:#FFF5F7; color:#333; line-height:1.6;";
+        document.body.innerHTML = `
+            <div style="max-width:400px; margin:0 auto; background:white; padding:30px 20px; border-radius:16px; box-shadow:0 4px 15px rgba(232,122,144,0.15); border:1px solid #F4A7B9;">
+                <span style="font-size: 40px;">📢</span>
+                <h3 style="color:#D05A6E; margin-top:10px; margin-bottom:20px;">預約系統連線提醒</h3>
+                <p style="font-size:16px; color:#555;">請不要使用社群軟體的內建瀏覽器。</p>
+                <div style="background:#FFF0F2; padding:12px; border-radius:8px; margin:20px 0; font-size:15px; font-weight:bold; color:#e74c3c;">
+                    👉 請點擊右上角「● ● ●」<br>並選擇「在瀏覽器中開啟」
+                </div>
+                <small style="color:#bababa;">微動身活管理系統關心您</small>
+            </div>
+        `;
         } else if (isMobileWidth) {
             // 手機版 Safari/Chrome：直接跳轉 (解決自動展開，避開 iframe 卡死)
             window.location.replace(gasUrl);
