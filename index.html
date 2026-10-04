@@ -1,0 +1,530 @@
+<title>微動身活</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 版面：頁首點出「為誰而開」→ 常規課表當主角（來訪者最常找的東西）→ 費用與報名流程 →
+   政策收在摺疊區，需要時才展開 → 交通與聯絡收尾。手機優先，單欄為主。 */
+:root{
+  --pink:#E0568F; --pink-deep:#C43D74; --pink-soft:#F7D4E2; --pink-wash:#FDF0F5;
+  --gold:#C9A876; --gold-deep:#9E7434; --gold-wash:#FBF2E2;
+  --paper:#FFFBFC; --card:#FFFFFF; --line:#F0DCE5;
+  --ink:#4A3540; --muted:#8E7280;
+  --display:'Quicksand',"Noto Sans TC",system-ui,sans-serif;
+  --body:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --pink:#F08CB4; --pink-deep:#F7B3CF; --pink-soft:#53303F; --pink-wash:#2E1C24;
+    --gold:#D9BC8C; --gold-deep:#E8D2A8; --gold-wash:#2C2419;
+    --paper:#1B1116; --card:#241820; --line:#3A2630;
+    --ink:#F6E9EE; --muted:#B8A0AC;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --pink:#F08CB4; --pink-deep:#F7B3CF; --pink-soft:#53303F; --pink-wash:#2E1C24;
+  --gold:#D9BC8C; --gold-deep:#E8D2A8; --gold-wash:#2C2419;
+  --paper:#1B1116; --card:#241820; --line:#3A2630;
+  --ink:#F6E9EE; --muted:#B8A0AC;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--body);font-size:16px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+a{color:var(--pink-deep)}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- 頁首 ---------- */
+.top{
+  background:linear-gradient(165deg,var(--pink-wash) 0%,var(--pink-soft) 100%);
+  border-bottom:1px solid var(--line);
+}
+.top .wrap{padding-block:52px 44px}
+.eyebrow{
+  font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.32em;
+  color:var(--pink-deep);margin:0 0 14px;text-transform:uppercase;
+}
+h1{font-size:clamp(38px,8vw,60px);font-weight:700;line-height:1.08;letter-spacing:.01em}
+.lede{font-size:clamp(17px,2.4vw,19px);color:var(--ink);max-width:34em;margin:20px 0 0;opacity:.9}
+.where{
+  display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;
+  font-size:15px;color:var(--muted);
+}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;
+  font-family:var(--display);font-weight:700;font-size:16px;
+  padding:14px 26px;border-radius:999px;text-decoration:none;
+  background:var(--pink);color:#fff;transition:transform .12s ease;
+}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--card);color:var(--pink-deep);border:2px solid var(--pink-soft)}
+.btn.gold{background:var(--gold-wash);color:var(--gold-deep);border:2px solid var(--gold)}
+
+/* ---------- 區塊 ---------- */
+section{padding-block:56px}
+section.alt{background:var(--pink-wash)}
+.shead{margin-bottom:26px}
+.shead h2{font-size:clamp(26px,4.4vw,34px);font-weight:700}
+.shead p{color:var(--muted);margin:8px 0 0;font-size:16px;max-width:42em}
+
+/* ---------- 課表 ---------- */
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.day{
+  flex:none;border:2px solid var(--pink-soft);background:var(--card);color:var(--ink);
+  font-family:var(--display);font-weight:700;font-size:16px;
+  padding:9px 20px;border-radius:999px;cursor:pointer;
+}
+.day[aria-selected="true"]{background:var(--pink);border-color:var(--pink);color:#fff}
+.slots{margin-top:22px;display:grid;gap:12px}
+.slot{
+  display:grid;grid-template-columns:92px 1fr;gap:0 20px;align-items:start;
+  background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 22px;
+}
+.slot .t{
+  font-family:var(--display);font-weight:700;font-size:20px;color:var(--pink-deep);
+  font-variant-numeric:tabular-nums;line-height:1.25;
+}
+.slot .t small{display:block;font-size:13px;font-weight:600;color:var(--muted)}
+.slot .n{font-size:19px;font-weight:700;line-height:1.35}
+.slot .c{font-size:15px;color:var(--muted);margin-top:2px}
+.rest{color:var(--muted);padding:28px 4px;font-size:16px}
+.note{
+  margin-top:20px;font-size:14px;color:var(--muted);
+  border-left:3px solid var(--gold);padding-left:14px;
+}
+
+/* ---------- 價目 ---------- */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 24px}
+.card h3{font-size:19px;font-weight:700;margin-bottom:4px}
+.card .sub{font-size:14px;color:var(--muted);margin:0 0 18px}
+.rows{list-style:none;margin:0;padding:0;display:grid;gap:11px}
+.rows li{display:flex;align-items:baseline;gap:12px;font-size:16px}
+.rows .lbl{flex:1;min-width:0}
+.rows .val{
+  font-family:var(--display);font-weight:700;font-size:19px;color:var(--pink-deep);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+.card.feature{border:2px solid var(--gold);background:var(--gold-wash)}
+.card.feature .val{color:var(--gold-deep)}
+.tag{
+  display:inline-block;font-family:var(--display);font-weight:700;font-size:12px;
+  letter-spacing:.1em;padding:4px 12px;border-radius:999px;
+  background:var(--gold);color:#3A2B14;margin-bottom:12px;
+}
+
+/* ---------- 步驟 ---------- */
+.steps{counter-reset:s;display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.steps li{
+  counter-increment:s;display:grid;grid-template-columns:40px 1fr;gap:0 16px;
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+}
+.steps li::before{
+  content:counter(s);font-family:var(--display);font-weight:700;font-size:17px;
+  width:32px;height:32px;border-radius:50%;background:var(--pink);color:#fff;
+  display:grid;place-items:center;
+}
+.steps b{display:block;font-size:17px;margin-bottom:2px}
+.steps span{font-size:15px;color:var(--muted)}
+.bank{
+  margin-top:18px;background:var(--card);border:2px dashed var(--pink-soft);
+  border-radius:16px;padding:20px 22px;
+}
+.bank .k{font-size:13px;color:var(--muted);letter-spacing:.08em}
+.bank .v{
+  font-family:var(--display);font-weight:700;font-size:clamp(20px,4.6vw,26px);
+  font-variant-numeric:tabular-nums;letter-spacing:.04em;word-break:break-all;
+}
+.bank .row{display:flex;flex-wrap:wrap;gap:16px 34px;margin-bottom:12px}
+.copy{
+  font-family:var(--display);font-weight:700;font-size:14px;cursor:pointer;
+  border:2px solid var(--pink-soft);background:var(--card);color:var(--pink-deep);
+  padding:9px 18px;border-radius:999px;
+}
+
+/* ---------- 政策摺疊 ---------- */
+details{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:0 22px;margin-bottom:12px;
+}
+details[open]{border-color:var(--pink-soft)}
+summary{
+  cursor:pointer;list-style:none;padding:18px 0;
+  font-family:var(--display);font-weight:700;font-size:18px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";color:var(--pink);font-size:20px;flex:none}
+details[open] summary::after{content:"−"}
+details .body{padding-bottom:22px;font-size:15.5px}
+details h4{
+  font-family:var(--display);font-size:15px;margin:18px 0 8px;color:var(--gold-deep);
+  letter-spacing:.04em;
+}
+details h4:first-child{margin-top:0}
+details ul{margin:0;padding-left:1.25em}
+details li{margin-bottom:7px}
+details li::marker{color:var(--pink)}
+.warn{
+  margin-top:16px;background:var(--pink-wash);border-radius:12px;padding:14px 18px;
+  font-size:14.5px;color:var(--ink);
+}
+
+/* ---------- 關於 ---------- */
+.about p{max-width:36em;margin:0 0 18px;font-size:17px}
+.motto{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(21px,4vw,27px);color:var(--pink-deep);
+  line-height:1.5;margin:28px 0 0;text-wrap:balance;
+}
+
+/* ---------- 頁尾 ---------- */
+footer{background:var(--ink);color:var(--paper);padding-block:46px}
+footer .wrap{display:grid;gap:30px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+footer h3{font-size:17px;margin-bottom:12px;color:#fff}
+footer p,footer li{font-size:15px;opacity:.82;margin:0 0 7px}
+footer a{color:var(--pink-soft);text-decoration:none}
+footer a:hover{text-decoration:underline}
+footer ul{list-style:none;margin:0;padding:0}
+.social{display:flex;flex-wrap:wrap;gap:10px}
+.social a{
+  border:1px solid rgba(255,255,255,.28);border-radius:999px;
+  padding:7px 16px;font-size:14px;font-family:var(--display);font-weight:600;
+}
+.fine{
+  border-top:1px solid rgba(255,255,255,.16);margin-top:34px;padding-top:20px;
+  font-size:13px;opacity:.6;
+}
+@media (max-width:460px){
+  .slot{grid-template-columns:1fr;gap:6px}
+  .slot .t small{display:inline;margin-left:8px}
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">Wei Dong · 新竹共享舞蹈空間</p>
+    <h1>微動身活</h1>
+    <p class="lede">在緊湊的日常裡，給自己一段專屬的時間。有氧、瑜珈、Kpop、兒童課程，一個人來或全家一起來都可以。</p>
+    <div class="where">
+      <span>新竹市東大路二段 685 號</span>
+      <span>有氧·瑜珈滿 4 人開班／兒童課滿 3 人開班</span>
+    </div>
+    <div class="cta">
+      <a class="btn" href="https://line.me/ti/p/@843qpnet">用 LINE 報名</a>
+      <a class="btn ghost" href="https://script.google.com/macros/s/AKfycby2fIjoIsGpZBdZOe2AqisNAZ0tXxdFnJC1tQImiQ_HDyCtyHJRwGNdRGwjuYblJgGsyg/exec?view=student">查詢我的課程／請假</a>
+      <a class="btn gold" href="#fees">看課程費用</a>
+    </div>
+  </div>
+</header>
+
+<section id="schedule">
+  <div class="wrap">
+    <div class="shead">
+      <h2>常規課表</h2>
+      <p>每週固定開課的班別。單堂體驗、大師課與活動課另行公告，實際開課狀況以報名系統為準。</p>
+    </div>
+    <div class="days" role="tablist" aria-label="選擇星期"></div>
+    <div class="slots" id="slots"></div>
+    <p class="note">課程偶有停課或代課，出發前可到「查詢我的課程」確認當天狀況。</p>
+  </div>
+</section>
+
+<section class="alt" id="fees">
+  <div class="wrap">
+    <div class="shead">
+      <h2>課程費用</h2>
+      <p>整期報名每堂比單堂便宜，期課另有早鳥優惠。</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>單堂課程</h3>
+        <p class="sub">臨時想動一下，單次付費</p>
+        <ul class="rows">
+          <li><span class="lbl">有氧／瑜珈</span><span class="val">$250</span></li>
+          <li><span class="lbl">兒童課程</span><span class="val">$350</span></li>
+          <li><span class="lbl">兒童滑步車</span><span class="val">$550</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>整期課程</h3>
+        <p class="sub">一次報滿一期，每堂的單價更低</p>
+        <ul class="rows">
+          <li><span class="lbl">有氧／瑜珈</span><span class="val">$220</span></li>
+          <li><span class="lbl">兒童課程</span><span class="val">$320</span></li>
+          <li><span class="lbl">兒童滑步車</span><span class="val">$520</span></li>
+        </ul>
+      </div>
+      <div class="card feature">
+        <span class="tag">最彈性</span>
+        <h3>成人自由選點數卡</h3>
+        <p class="sub">1 點 = 1 堂，課程自己挑</p>
+        <ul class="rows">
+          <li><span class="lbl">5 點課程卡</span><span class="val">$1,150</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="join">
+  <div class="wrap">
+    <div class="shead">
+      <h2>怎麼報名</h2>
+      <p>名額保留 24 小時，完成匯款並回傳證明才算完成報名。</p>
+    </div>
+    <ol class="steps">
+      <li><b>選課</b><span>從上面的課表挑好班別與時段，或直接私訊 LINE 問我們。</span></li>
+      <li><b>24 小時內匯款</b><span>逾期系統會自動釋出名額。匯款帳號在下面。</span></li>
+      <li><b>私訊回傳匯款末 5 碼</b><span>點數卡也一樣，匯款後私訊官方 LINE 領卡。</span></li>
+      <li><b>自行查詢確認</b><span>用「查詢我的課程」確認狀態，看到報名成功才算數。我們不會另外打電話通知。</span></li>
+    </ol>
+    <div class="bank">
+      <div class="row">
+        <div><div class="k">銀行代碼</div><div class="v">700 郵局</div></div>
+        <div><div class="k">帳號</div><div class="v" id="acct">00610830283155</div></div>
+      </div>
+      <button class="copy" id="copyBtn" type="button">複製帳號</button>
+    </div>
+    <div class="warn"><b>提醒</b>：我們的通知信不會包含任何連結或銀行帳號。收到這類訊息請先聯繫官方 LINE 確認。</div>
+  </div>
+</section>
+
+<section class="alt" id="policy">
+  <div class="wrap">
+    <div class="shead">
+      <h2>報名前請先看這些</h2>
+      <p>退費、請假補課與教室規範。報名即視為同意。</p>
+    </div>
+
+    <details>
+      <summary>退費與請假補課</summary>
+      <div class="body">
+        <h4>退費規定</h4>
+        <ul>
+          <li>開課前 <b>7 天以上</b>取消：全額退費，扣除轉帳手續費。</li>
+          <li>開課前 <b>3–6 天</b>取消：退還學費 80%。</li>
+          <li>開課前 <b>2 天至開課當日</b>取消：恕不退費。</li>
+        </ul>
+        <h4>請假與補課</h4>
+        <ul>
+          <li>團體課名額固定，因個人因素請假請於<b>課前 24 小時</b>告知。</li>
+          <li>補課需在該期課程結束前，自行預約其他有空位的時段，酌收 <b>30 元</b>手續費；逾期視同放棄。</li>
+          <li>若因人數不足或天災等不可抗力無法開課，全額退費或安排延期。</li>
+        </ul>
+        <div class="warn">特殊狀況以館方決定為準。</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>上課須知</summary>
+      <div class="body">
+        <h4>報名與繳費</h4>
+        <ul>
+          <li>名額保留 24 小時，請完成繳費並回傳證明。</li>
+          <li>請自行用查詢功能確認狀態，才算完成報名。</li>
+          <li>開班人數：有氧／瑜珈滿 4 人、兒童課滿 3 人。</li>
+        </ul>
+        <h4>上課規範</h4>
+        <ul>
+          <li>建議課前 10 分鐘到。遲到超過 <b>15 分鐘</b>，老師有權拒絕入場，該堂視同扣課。</li>
+          <li>請穿運動服裝與乾淨的室內運動鞋。</li>
+          <li>有疾病或懷孕請先徵詢醫師，並主動告知老師。</li>
+        </ul>
+        <h4>環境維護</h4>
+        <ul>
+          <li>貴重物品請自行保管，教室不負賠償責任。</li>
+          <li>禁止飲食，開水除外；器材用完請清潔歸位。</li>
+          <li>課程中可能側拍作為品牌宣傳，不希望入鏡請事先告知。</li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>教室使用規章</summary>
+      <div class="body">
+        <h4>入場與報到</h4>
+        <ul>
+          <li>進入前先完成櫃檯或線上簽到，以取得開鎖密碼。</li>
+          <li>建議課前 10–15 分鐘抵達。</li>
+          <li>請更換室內專用鞋或赤腳，依課程性質而定，禁止室外鞋入內。</li>
+        </ul>
+        <h4>空間使用</h4>
+        <ul>
+          <li>器材使用後請以清潔噴霧消毒並歸位。</li>
+          <li>損壞電器或設備須負賠償責任。</li>
+          <li>禁止飲食，有蓋的飲用水除外；垃圾請自行帶走或投入指定垃圾桶。</li>
+          <li>最後離開者請確認關閉所有空調與電器。</li>
+        </ul>
+        <h4>健康與安全</h4>
+        <ul>
+          <li>有潛在疾病或懷孕請預先告知，避免高風險動作。</li>
+          <li>嚴禁在無專業教練陪同下操作高難度器材。</li>
+          <li>受傷或不適請立即通知工作人員。</li>
+        </ul>
+        <div class="warn">經勸導無效者，教室有權要求立即離場且不予退費；情節嚴重將取消資格。</div>
+      </div>
+    </details>
+
+    <details>
+      <summary>點數卡使用規則</summary>
+      <div class="body">
+        <ul>
+          <li>1 點 = 1 堂課，可自由選擇適用課程。</li>
+          <li>課程採預約制，依各班剩餘名額開放。</li>
+          <li>完成課程後由教室提供 QR Code 集 1 點。</li>
+          <li>自取卡日起 <b>1 個月內</b>有效，逾期未用完的堂數失效。</li>
+          <li>預約後需取消，請於開課 <b>24 小時前</b>完成請假；逾時取消視同使用 1 堂。</li>
+          <li>點數不限本人使用，但不得轉讓帳號、兌換現金或與其他優惠併用。</li>
+          <li>特殊課程、工作坊及指定課程不適用，依教室公告為準。</li>
+        </ul>
+        <div class="warn">匯款完成後，請私訊官方 LINE 確認款項並領取點數卡。</div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section id="rent">
+  <div class="wrap">
+    <div class="shead">
+      <h2>教室租借</h2>
+      <p>練團、排舞、辦活動都可以。租借時段包含場佈與撤場時間。</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>大教室</h3>
+        <ul class="rows"><li><span class="lbl">每小時</span><span class="val">$1,000</span></li></ul>
+      </div>
+      <div class="card">
+        <h3>中教室</h3>
+        <ul class="rows"><li><span class="lbl">每小時</span><span class="val">$800</span></li></ul>
+      </div>
+      <div class="card">
+        <h3>小教室</h3>
+        <ul class="rows"><li><span class="lbl">每小時</span><span class="val">$500</span></li></ul>
+      </div>
+    </div>
+    <p class="note">需要長期配合或包時段，歡迎私訊洽詢。</p>
+  </div>
+</section>
+
+<section class="alt about" id="about">
+  <div class="wrap">
+    <div class="shead"><h2>關於微動身活</h2></div>
+    <p>我們在新竹市東大路二段 685 號，是一個專為喜歡舞蹈與運動的人打造的共享空間。教室明亮舒適，適合街舞、瑜珈、有氧等各種課程，也開放租借。</p>
+    <p>運動的意義不只是流汗，更是替自己充電。不管是熱情的 Zumba、活力的派對有氧，還是輕鬆好玩的流行 MV 舞蹈，都能讓你暫時把煩惱放下。</p>
+    <p>大人小孩的課程我們都有。一個人來可以，全家一起來也可以，爺爺奶奶帶孫子來揮汗同樣歡迎。</p>
+    <p class="motto">微微的動，慢慢身活；<br>快樂的動，精采生活。</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <h3>微動身活 共享舞蹈空間</h3>
+      <p>新竹市東大路二段 685 號</p>
+      <p><a href="https://www.google.com/maps/search/?api=1&query=新竹市東大路二段685號">在地圖上開啟</a></p>
+    </div>
+    <div>
+      <h3>聯絡我們</h3>
+      <p>報名、請假、課程問題都走 LINE 最快。</p>
+      <p>weidonglife2026@gmail.com</p>
+    </div>
+    <div>
+      <h3>追蹤我們</h3>
+      <div class="social">
+        <a href="https://line.me/ti/p/@843qpnet">LINE</a>
+        <a href="https://www.instagram.com/weidong2026/">Instagram</a>
+        <a href="https://www.facebook.com/profile.php?id=61575441340032">Facebook</a>
+        <a href="https://www.threads.net/@weidong2026">Threads</a>
+      </div>
+    </div>
+    <div class="fine" style="grid-column:1/-1">© 2026 微動身活 共享舞蹈空間　All Rights Reserved.</div>
+  </div>
+</footer>
+
+<script>
+var WEEK = ['週日','週一','週二','週三','週四','週五','週六'];
+var CLASSES = [
+  { d:1, s:'19:00', e:'19:55', n:'伸展瑜珈',       c:'UNA' },
+  { d:1, s:'20:00', e:'20:55', n:'ZUMBA',          c:'UNA' },
+  { d:1, s:'20:00', e:'20:55', n:'伸展瑜珈',       c:'小娟' },
+  { d:3, s:'09:30', e:'10:30', n:'ZBXSN',          c:'GRACE+乖' },
+  { d:3, s:'14:00', e:'14:55', n:'InSideflow 內觀流', c:'呂小寶' },
+  { d:3, s:'19:30', e:'20:25', n:'成人 Kpop',      c:'小石' },
+  { d:4, s:'19:00', e:'19:55', n:'基礎 Kpop',      c:'萱萱' },
+  { d:6, s:'10:00', e:'10:55', n:'伸展瑜珈',       c:'Susan' },
+  { d:0, s:'15:00', e:'16:30', n:'兒童滑步車',     c:'Dino' },
+  { d:0, s:'17:30', e:'18:25', n:'Zumba',          c:'Grace' }
+];
+
+var daysEl = document.querySelector('.days');
+var slotsEl = document.getElementById('slots');
+var order = [1,2,3,4,5,6,0];
+var today = new Date().getDay();
+var current = CLASSES.some(function(c){ return c.d === today; }) ? today : 1;
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderDays(scrollIntoView){
+  daysEl.innerHTML = order.map(function(d){
+    return '<button class="day" role="tab" data-d="' + d + '" aria-selected="' +
+      (d === current) + '">' + WEEK[d] + '</button>';
+  }).join('');
+  if (scrollIntoView) {
+    var on = daysEl.querySelector('[aria-selected="true"]');
+    if (on) daysEl.scrollLeft = Math.max(0, on.offsetLeft - 16);
+  }
+}
+
+function renderSlots(){
+  var list = CLASSES.filter(function(c){ return c.d === current; })
+    .sort(function(a,b){ return a.s.localeCompare(b.s); });
+  if (!list.length) {
+    slotsEl.innerHTML = '<p class="rest">這天沒有常規課程。換一天看看，或私訊我們問問活動課。</p>';
+    return;
+  }
+  slotsEl.innerHTML = list.map(function(c){
+    return '<div class="slot"><div class="t">' + c.s + '<small>' + c.e + '</small></div>' +
+      '<div><div class="n">' + esc(c.n) + '</div><div class="c">' + esc(c.c) + '</div></div></div>';
+  }).join('');
+}
+
+daysEl.addEventListener('click', function(ev){
+  var b = ev.target.closest('.day');
+  if (!b) return;
+  current = Number(b.dataset.d);
+  renderDays();
+  renderSlots();
+});
+
+renderDays(true);
+renderSlots();
+
+var copyBtn = document.getElementById('copyBtn');
+copyBtn.addEventListener('click', function(){
+  var txt = document.getElementById('acct').textContent.trim();
+  var done = function(){ copyBtn.textContent = '已複製'; setTimeout(function(){ copyBtn.textContent = '複製帳號'; }, 1800); };
+  try {
+    navigator.clipboard.writeText(txt).then(done, select);
+  } catch (e) { select(); }
+  function select(){
+    var r = document.createRange();
+    r.selectNodeContents(document.getElementById('acct'));
+    var sel = window.getSelection();
+    sel.removeAllRanges(); sel.addRange(r);
+    copyBtn.textContent = '請手動複製';
+    setTimeout(function(){ copyBtn.textContent = '複製帳號'; }, 2400);
+  }
+});
+</script>
