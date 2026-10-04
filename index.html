@@ -1,3 +1,9 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="微動身活 — 新竹共享舞蹈空間。有氧、瑜珈、Kpop、兒童課程，單堂、整期與點數卡皆可報名。">
 <title>微動身活</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -210,7 +216,8 @@ footer ul{list-style:none;margin:0;padding:0}
   .slot .t small{display:inline;margin-left:8px}
 }
 </style>
-
+</head>
+<body>
 <header class="top">
   <div class="wrap">
     <p class="eyebrow">Wei Dong · 新竹共享舞蹈空間</p>
@@ -222,7 +229,6 @@ footer ul{list-style:none;margin:0;padding:0}
     </div>
     <div class="cta">
       <a class="btn" href="https://line.me/ti/p/@843qpnet">用 LINE 報名</a>
-      <a class="btn ghost" href="https://script.google.com/macros/s/AKfycby2fIjoIsGpZBdZOe2AqisNAZ0tXxdFnJC1tQImiQ_HDyCtyHJRwGNdRGwjuYblJgGsyg/exec?view=student">查詢我的課程／請假</a>
       <a class="btn gold" href="#fees">看課程費用</a>
     </div>
   </div>
@@ -232,11 +238,11 @@ footer ul{list-style:none;margin:0;padding:0}
   <div class="wrap">
     <div class="shead">
       <h2>常規課表</h2>
-      <p>每週固定開課的班別，成人自由選點數卡都可以預約。單堂體驗、大師課與活動課另行公告，實際開課狀況以報名系統為準。</p>
+      <p>有氧、瑜珈、Kpop、兒童課程，每週固定開課。</p>
     </div>
-    <div class="days" role="tablist" aria-label="選擇星期"></div>
-    <div class="slots" id="slots"></div>
-    <p class="note">課程偶有停課或代課，出發前可到「查詢我的課程」確認當天狀況。</p>
+    <div class="slots">
+      <p class="rest">課表更新中。想知道這週開哪些班、還有沒有名額，請直接用 LINE 問我們，會有專人回覆。</p>
+    </div>
   </div>
 </section>
 
@@ -284,10 +290,10 @@ footer ul{list-style:none;margin:0;padding:0}
       <p>名額保留 24 小時，完成匯款並回傳證明才算完成報名。</p>
     </div>
     <ol class="steps">
-      <li><b>選課</b><span>從上面的課表挑好班別與時段，或直接私訊 LINE 問我們。</span></li>
-      <li><b>24 小時內匯款</b><span>逾期系統會自動釋出名額。匯款帳號在下面。</span></li>
+      <li><b>私訊 LINE 選課</b><span>告訴我們你想上的班別與時段，我們會回覆還有沒有名額。</span></li>
+      <li><b>24 小時內匯款</b><span>逾期名額會自動釋出。匯款帳號在下面。</span></li>
       <li><b>私訊回傳匯款末 5 碼</b><span>點數卡也一樣，匯款後私訊官方 LINE 領卡。</span></li>
-      <li><b>自行查詢確認</b><span>用「查詢我的課程」確認狀態，看到報名成功才算數。我們不會另外打電話通知。</span></li>
+      <li><b>等候確認訊息</b><span>我們會在 LINE 回覆「報名成功」，收到才算完成。</span></li>
     </ol>
     <div class="bank">
       <div class="row">
@@ -332,7 +338,7 @@ footer ul{list-style:none;margin:0;padding:0}
         <h4>報名與繳費</h4>
         <ul>
           <li>名額保留 24 小時，請完成繳費並回傳證明。</li>
-          <li>請自行用查詢功能確認狀態，才算完成報名。</li>
+          <li>我們會在 LINE 回覆確認，收到確認才算完成報名。</li>
           <li>開班人數：有氧／瑜珈滿 4 人、兒童課滿 3 人。</li>
         </ul>
         <h4>上課規範</h4>
@@ -454,67 +460,6 @@ footer ul{list-style:none;margin:0;padding:0}
 </footer>
 
 <script>
-var WEEK = ['週日','週一','週二','週三','週四','週五','週六'];
-var CLASSES = [
-  { d:1, s:'19:00', e:'19:55', n:'伸展瑜珈',          c:'UNA' },
-  { d:1, s:'20:00', e:'20:55', n:'ZUMBA',             c:'UNA' },
-  { d:1, s:'20:00', e:'20:55', n:'伸展瑜珈',          c:'小娟' },
-  { d:3, s:'09:30', e:'10:30', n:'ZBXSN',             c:'GRACE+乖' },
-  { d:3, s:'14:00', e:'14:55', n:'InSideflow 內觀流', c:'呂小寶' },
-  { d:3, s:'19:30', e:'20:25', n:'成人 Kpop',         c:'小石' },
-  { d:4, s:'19:00', e:'19:55', n:'基礎 Kpop',         c:'萱萱' },
-  { d:4, s:'20:10', e:'21:05', n:'ZUMBA',             c:'地瓜' },
-  { d:5, s:'18:00', e:'18:55', n:'ZUMBA',             c:'巧巧' },
-  { d:5, s:'20:00', e:'20:55', n:'ZUMBA',             c:'Luna' },
-  { d:6, s:'09:45', e:'10:40', n:'ZUMBA',             c:'冰冰' },
-  { d:6, s:'10:00', e:'10:55', n:'伸展瑜珈',          c:'Susan' },
-  { d:0, s:'15:00', e:'16:30', n:'兒童滑步車',        c:'Dino' },
-  { d:0, s:'17:30', e:'18:25', n:'Zumba',             c:'Grace' }
-];
-
-var daysEl = document.querySelector('.days');
-var slotsEl = document.getElementById('slots');
-var order = [1,2,3,4,5,6,0];
-var today = new Date().getDay();
-var current = CLASSES.some(function(c){ return c.d === today; }) ? today : 1;
-
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function renderDays(scrollIntoView){
-  daysEl.innerHTML = order.map(function(d){
-    return '<button class="day" role="tab" data-d="' + d + '" aria-selected="' +
-      (d === current) + '">' + WEEK[d] + '</button>';
-  }).join('');
-  if (scrollIntoView) {
-    var on = daysEl.querySelector('[aria-selected="true"]');
-    if (on) daysEl.scrollLeft = Math.max(0, on.offsetLeft - 16);
-  }
-}
-
-function renderSlots(){
-  var list = CLASSES.filter(function(c){ return c.d === current; })
-    .sort(function(a,b){ return a.s.localeCompare(b.s); });
-  if (!list.length) {
-    slotsEl.innerHTML = '<p class="rest">這天沒有常規課程。換一天看看，或私訊我們問問活動課。</p>';
-    return;
-  }
-  slotsEl.innerHTML = list.map(function(c){
-    return '<div class="slot"><div class="t">' + c.s + '<small>' + c.e + '</small></div>' +
-      '<div><div class="n">' + esc(c.n) + '</div><div class="c">' + esc(c.c) + '</div></div></div>';
-  }).join('');
-}
-
-daysEl.addEventListener('click', function(ev){
-  var b = ev.target.closest('.day');
-  if (!b) return;
-  current = Number(b.dataset.d);
-  renderDays();
-  renderSlots();
-});
-
-renderDays(true);
-renderSlots();
-
 var copyBtn = document.getElementById('copyBtn');
 copyBtn.addEventListener('click', function(){
   var txt = document.getElementById('acct').textContent.trim();
@@ -532,3 +477,6 @@ copyBtn.addEventListener('click', function(){
   }
 });
 </script>
+
+</body>
+</html>
