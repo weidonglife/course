@@ -232,7 +232,7 @@ footer ul{list-style:none;margin:0;padding:0}
   <div class="wrap">
     <div class="shead">
       <h2>常規課表</h2>
-      <p>每週固定開課的班別。單堂體驗、大師課與活動課另行公告，實際開課狀況以報名系統為準。</p>
+      <p>每週固定開課的班別，成人自由選點數卡都可以預約。單堂體驗、大師課與活動課另行公告，實際開課狀況以報名系統為準。</p>
     </div>
     <div class="days" role="tablist" aria-label="選擇星期"></div>
     <div class="slots" id="slots"></div>
@@ -456,16 +456,20 @@ footer ul{list-style:none;margin:0;padding:0}
 <script>
 var WEEK = ['週日','週一','週二','週三','週四','週五','週六'];
 var CLASSES = [
-  { d:1, s:'19:00', e:'19:55', n:'伸展瑜珈',       c:'UNA' },
-  { d:1, s:'20:00', e:'20:55', n:'ZUMBA',          c:'UNA' },
-  { d:1, s:'20:00', e:'20:55', n:'伸展瑜珈',       c:'小娟' },
-  { d:3, s:'09:30', e:'10:30', n:'ZBXSN',          c:'GRACE+乖' },
+  { d:1, s:'19:00', e:'19:55', n:'伸展瑜珈',          c:'UNA' },
+  { d:1, s:'20:00', e:'20:55', n:'ZUMBA',             c:'UNA' },
+  { d:1, s:'20:00', e:'20:55', n:'伸展瑜珈',          c:'小娟' },
+  { d:3, s:'09:30', e:'10:30', n:'ZBXSN',             c:'GRACE+乖' },
   { d:3, s:'14:00', e:'14:55', n:'InSideflow 內觀流', c:'呂小寶' },
-  { d:3, s:'19:30', e:'20:25', n:'成人 Kpop',      c:'小石' },
-  { d:4, s:'19:00', e:'19:55', n:'基礎 Kpop',      c:'萱萱' },
-  { d:6, s:'10:00', e:'10:55', n:'伸展瑜珈',       c:'Susan' },
-  { d:0, s:'15:00', e:'16:30', n:'兒童滑步車',     c:'Dino' },
-  { d:0, s:'17:30', e:'18:25', n:'Zumba',          c:'Grace' }
+  { d:3, s:'19:30', e:'20:25', n:'成人 Kpop',         c:'小石' },
+  { d:4, s:'19:00', e:'19:55', n:'基礎 Kpop',         c:'萱萱' },
+  { d:4, s:'20:10', e:'21:05', n:'ZUMBA',             c:'地瓜' },
+  { d:5, s:'18:00', e:'18:55', n:'ZUMBA',             c:'巧巧' },
+  { d:5, s:'20:00', e:'20:55', n:'ZUMBA',             c:'Luna' },
+  { d:6, s:'09:45', e:'10:40', n:'ZUMBA',             c:'冰冰' },
+  { d:6, s:'10:00', e:'10:55', n:'伸展瑜珈',          c:'Susan' },
+  { d:0, s:'15:00', e:'16:30', n:'兒童滑步車',        c:'Dino' },
+  { d:0, s:'17:30', e:'18:25', n:'Zumba',             c:'Grace' }
 ];
 
 var daysEl = document.querySelector('.days');
