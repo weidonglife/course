@@ -283,47 +283,12 @@ footer ul{list-style:none;margin:0;padding:0}
   <div class="wrap">
     <div class="shead">
       <h2>課程費用</h2>
-      <p>整期報名每堂比單堂便宜，期課另有早鳥優惠。另有限量與季節性方案，開放時會出現在報名頁。</p>
+      <p>整期報名每堂比單堂便宜，期課另有早鳥優惠。以下金額直接取自教室的報名系統，隨時都是最新的。</p>
     </div>
-    <div class="grid">
-      <div class="card">
-        <h3>單堂課程</h3>
-        <p class="sub">臨時想動一下，單次付費</p>
-        <ul class="rows">
-          <li><span class="lbl">有氧／瑜珈</span><span class="val">$250</span></li>
-          <li><span class="lbl">兒童課程</span><span class="val">$350</span></li>
-          <li><span class="lbl">兒童滑步車</span><span class="val">$550</span></li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>整期課程</h3>
-        <p class="sub">一次報滿一期，每堂的單價更低</p>
-        <ul class="rows">
-          <li><span class="lbl">有氧／瑜珈</span><span class="val">$220</span></li>
-          <li><span class="lbl">兒童課程</span><span class="val">$320</span></li>
-          <li><span class="lbl">兒童滑步車</span><span class="val">$520</span></li>
-        </ul>
-      </div>
-      <div class="card feature">
-        <span class="tag">最彈性</span>
-        <h3>點數卡</h3>
-        <p class="sub">1 點上 1 堂，課程自己挑，買越多送越多</p>
-        <ul class="rows">
-          <li><span class="lbl">5 點<i>再送 1 點</i></span><span class="val">$1,150</span></li>
-          <li><span class="lbl">10 點<i>再送 3 點</i></span><span class="val">$2,200</span></li>
-          <li><span class="lbl">20 點<i>再送 8 點</i></span><span class="val">$4,100</span></li>
-        </ul>
-        <p class="note">自取卡日起 180 天內有效。贈送的點數會留到最後才扣，買的先用。</p>
-      </div>
-      <div class="card">
-        <h3>無限卡</h3>
-        <p class="sub">效期內上課不限次數，排得進就能上</p>
-        <ul class="rows">
-          <li><span class="lbl">30 天</span><span class="val">$2,000</span></li>
-          <li><span class="lbl">180 天</span><span class="val">$10,000</span></li>
-        </ul>
-        <p class="note">可上單堂定價 250 元以內的課程。限本人使用，不能借給親友。</p>
-      </div>
+    <!-- 這一區的內容由 JS 從報名系統即時抓，不要在這裡手打價格：
+         手打的話試算表改了這裡不會跟著改，兩邊就會對不上。 -->
+    <div class="grid" id="feeGrid" aria-live="polite">
+      <p class="rest" id="feeMsg">正在取得最新費用…</p>
     </div>
   </div>
 </section>
@@ -522,6 +487,84 @@ copyBtn.addEventListener('click', function(){
     setTimeout(function(){ copyBtn.textContent = '複製帳號'; }, 2400);
   }
 });
+
+/* ---------- 課程費用：跟報名系統拿，不要寫死在網頁裡 ----------
+   價格只有一個來源：教室的 Google 試算表。這裡抓的網址只會吐價目表，
+   不含任何學員資料。抓不到的時候寧可叫人去報名頁看，也不要顯示過期的數字。 */
+(function(){
+  var API = 'https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2q'
+          + 'Al2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec?api=prices';
+  var BOOK = 'https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2q'
+           + 'Al2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec';
+  var grid = document.getElementById('feeGrid');
+  if (!grid) return;
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function money(n){ return '$' + Number(n).toLocaleString('en-US'); }
+  /* 同一類別有好幾堂、價格不同時顯示成區間 */
+  function range(lo, hi){ return lo === hi ? money(lo) : money(lo) + '–' + Number(hi).toLocaleString('en-US'); }
+  function rows(list){ return '<ul class="rows">' + list.join('') + '</ul>'; }
+  function row(lbl, sub, val){
+    return '<li><span class="lbl">' + esc(lbl) +
+           (sub ? '<i>' + esc(sub) + '</i>' : '') +
+           '</span><span class="val">' + val + '</span></li>';
+  }
+  function card(cls, tag, title, sub, body, note){
+    return '<div class="card' + (cls ? ' ' + cls : '') + '">' +
+      (tag ? '<span class="tag">' + esc(tag) + '</span>' : '') +
+      '<h3>' + esc(title) + '</h3>' +
+      '<p class="sub">' + esc(sub) + '</p>' + body +
+      (note ? '<p class="note">' + esc(note) + '</p>' : '') + '</div>';
+  }
+  function bail(){
+    grid.innerHTML = '<p class="rest">目前拿不到最新費用。' +
+      '請到<a href="' + BOOK + '">課程查詢及線上報名</a>頁查看，' +
+      '上面的金額一定是最新的。</p>';
+  }
+
+  fetch(API).then(function(r){
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }).then(function(d){
+    if (!d || !d.cats) throw new Error('格式不對');
+    var out = [];
+
+    var one = d.cats.filter(function(c){ return c.oneLo > 0; })
+                    .map(function(c){ return row(c.cat, '', range(c.oneLo, c.oneHi)); });
+    if (one.length) out.push(card('', '', '單堂課程', '臨時想動一下，單次付費', rows(one), ''));
+
+    var term = d.cats.filter(function(c){ return c.termLo > 0; })
+                     .map(function(c){ return row(c.cat, '', range(c.termLo, c.termHi)); });
+    if (term.length) out.push(card('', '', '整期課程', '一次報滿一期，每堂的單價更低', rows(term), ''));
+
+    /* 賣完的不掛在官網上，不然有人特地點進去才發現買不到 */
+    /* 標題用方案名稱，不要只寫「6 點」。像新師體驗卡 6 點賣 1000、
+       比五堂卡 1150 還便宜，只寫點數的話看起來像標錯價。 */
+    var pt = (d.plans || []).filter(function(p){ return !p.soldOut; })
+      .map(function(p){
+        var sub = p.pts + ' 點' + (p.gift > 0 ? '，再送 ' + p.gift + ' 點' : '');
+        return row(p.name, sub, money(p.price));
+      });
+    if (pt.length) out.push(card('feature', '最彈性', '點數卡',
+      '1 點上 1 堂，課程自己挑，買越多送越多', rows(pt),
+      '自取卡日起 ' + (d.days || 180) + ' 天內有效。贈送的點數會留到最後才扣，買的先用。'));
+
+    var fr = (d.free || []).filter(function(p){ return !p.soldOut; });
+    if (fr.length) {
+      var caps = fr.map(function(p){ return p.limit; })
+                   .filter(function(v){ return v > 0; });
+      var cap = caps.length ? Math.max.apply(null, caps) : 0;
+      out.push(card('', '', '無限卡', '效期內上課不限次數，排得進就能上',
+        rows(fr.map(function(p){ return row(p.days + ' 天', '', money(p.price)); })),
+        (cap ? '可上單堂定價 ' + cap + ' 元以內的課程。' : '') +
+        '限本人使用，不能借給親友。'));
+    }
+
+    if (!out.length) return bail();
+    grid.innerHTML = out.join('');
+  }).catch(bail);
+})();
 </script>
 
 </body>
