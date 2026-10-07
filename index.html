@@ -54,19 +54,25 @@ a{color:var(--pink-deep)}
 :focus-visible{outline:3px solid var(--pink);outline-offset:3px;border-radius:6px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
-/* ---------- 品牌列 ----------
-   LOGO 自己就寫著「WEI DONG · 微動身活共享舞蹈空間」，所以原本頁首那行同樣內容的小標
-   就拿掉了，不用把同一個名字講三次。 */
-.brandbar{background:var(--plate);border-bottom:2px solid var(--pink)}
-.brandbar .wrap{padding-block:15px}
-.brandbar img{display:block;width:clamp(226px,32vw,300px);height:auto}
-
-/* ---------- 頁首 ---------- */
+/* ---------- 頁首 ----------
+   LOGO 自己就寫著「WEI DONG · 微動身活共享舞蹈空間」，所以頁首沒有再放一行同樣內容的小標。
+   原本 LOGO 單獨佔一條淺色的品牌列，現在搬進頁首右邊跟大標並排——
+   那半邊本來是空的，右邊有東西，整塊才站得住。
+   LOGO 的背景是透明的，所以深色底直接壓得上去，不用再墊一層淺色。 */
 .top{
   background:linear-gradient(165deg,var(--pink-wash) 0%,var(--pink-soft) 100%);
   border-bottom:1px solid var(--line);
 }
 .top .wrap{padding-block:52px 44px}
+.hero{display:grid;gap:26px;align-items:start}
+.hlogo{display:block;width:clamp(240px,40vw,300px);height:auto}
+@media (min-width:900px){
+  /* 文字一欄、LOGO 一欄。LOGO 在原始碼裡排在前面（手機要在最上面），
+     這裡用 order 把它丟到右邊那一欄去。 */
+  .hero{grid-template-columns:minmax(0,1fr) auto;gap:44px}
+  .hcopy{order:1;min-width:0}
+  .hlogo{order:2;margin-top:6px}
+}
 .eyebrow{
   font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.32em;
   color:var(--pink-deep);margin:0 0 14px;text-transform:uppercase;
@@ -242,14 +248,12 @@ footer ul{list-style:none;margin:0;padding:0}
 </style>
 </head>
 <body>
-<div class="brandbar">
-  <div class="wrap">
-    <img src="logo-wide.png" width="600" height="155" alt="微動身活共享舞蹈空間">
-  </div>
-</div>
-
 <header class="top">
-  <div class="wrap">
+  <div class="wrap hero">
+    <!-- LOGO 擺在標題前面，是為了手機：一欄排的時候它要在最上面。
+         寬螢幕再用 order 把它換到右邊那一欄。 -->
+    <img class="hlogo" src="logo-wide.png" width="600" height="155" alt="微動身活共享舞蹈空間">
+    <div class="hcopy">
     <h1>微動身活</h1>
     <p class="lede">在緊湊的日常裡，給自己一段專屬的時間。有氧、瑜珈、Kpop、兒童課程，一個人來或全家一起來都可以。</p>
     <div class="where">
@@ -263,6 +267,7 @@ footer ul{list-style:none;margin:0;padding:0}
       <!-- 「用 LINE 報名」暫停中。要恢復的話，把下面這一行的註解符號拿掉即可。
       <a class="btn ghost" href="https://line.me/ti/p/@843qpnet">用 LINE 報名</a>
       -->
+    </div>
     </div>
   </div>
 </header>
