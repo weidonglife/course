@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="微動身活 — 新竹共享舞蹈空間。有氧、瑜珈、Kpop、兒童課程，單堂、整期與點數卡皆可報名。">
 <title>微動身活</title>
+<link rel="icon" href="icon-180.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -16,6 +18,8 @@
   --gold:#C9A876; --gold-deep:#9E7434; --gold-wash:#FBF2E2;
   --paper:#FFFBFC; --card:#FFFFFF; --line:#F0DCE5;
   --ink:#4A3540; --muted:#8E7280;
+  /* LOGO 的金字和白色線條只有在淺底上看得清楚，所以品牌列單獨留一個夠亮的底色 */
+  --plate:#FFFFFF;
   --display:'Quicksand',"Noto Sans TC",system-ui,sans-serif;
   --body:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
@@ -25,6 +29,8 @@
     --gold:#D9BC8C; --gold-deep:#E8D2A8; --gold-wash:#2C2419;
     --paper:#1B1116; --card:#241820; --line:#3A2630;
     --ink:#F6E9EE; --muted:#B8A0AC;
+    /* 深色模式下不用純白，太刺眼；調成帶一點粉的米白，LOGO 一樣看得清楚 */
+    --plate:#F4EAEF;
     color-scheme:dark;
   }
 }
@@ -47,6 +53,13 @@ h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
 a{color:var(--pink-deep)}
 :focus-visible{outline:3px solid var(--pink);outline-offset:3px;border-radius:6px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- 品牌列 ----------
+   LOGO 自己就寫著「WEI DONG · 微動身活共享舞蹈空間」，所以原本頁首那行同樣內容的小標
+   就拿掉了，不用把同一個名字講三次。 */
+.brandbar{background:var(--plate);border-bottom:2px solid var(--pink)}
+.brandbar .wrap{padding-block:15px}
+.brandbar img{display:block;width:clamp(226px,32vw,300px);height:auto}
 
 /* ---------- 頁首 ---------- */
 .top{
@@ -218,9 +231,14 @@ footer ul{list-style:none;margin:0;padding:0}
 </style>
 </head>
 <body>
+<div class="brandbar">
+  <div class="wrap">
+    <img src="logo-wide.png" width="600" height="155" alt="微動身活共享舞蹈空間">
+  </div>
+</div>
+
 <header class="top">
   <div class="wrap">
-    <p class="eyebrow">Wei Dong · 新竹共享舞蹈空間</p>
     <h1>微動身活</h1>
     <p class="lede">在緊湊的日常裡，給自己一段專屬的時間。有氧、瑜珈、Kpop、兒童課程，一個人來或全家一起來都可以。</p>
     <div class="where">
