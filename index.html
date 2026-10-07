@@ -258,7 +258,7 @@ footer ul{list-style:none;margin:0;padding:0}
     </div>
     <div class="cta">
       <a class="btn" href="https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2qAl2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec">課程查詢及線上報名</a>
-      <a class="btn gold" href="#fees">看課程費用</a>
+      <a class="btn gold" href="https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2qAl2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec?view=rent">教室租借</a>
       <a class="btn ghost" href="https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2qAl2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec?view=leave">線上請假</a>
       <!-- 「用 LINE 報名」暫停中。要恢復的話，把下面這一行的註解符號拿掉即可。
       <a class="btn ghost" href="https://line.me/ti/p/@843qpnet">用 LINE 報名</a>
@@ -415,23 +415,12 @@ footer ul{list-style:none;margin:0;padding:0}
   <div class="wrap">
     <div class="shead">
       <h2>教室租借</h2>
-      <p>練團、排舞、辦活動都可以。租借時段包含場佈與撤場時間。</p>
+      <p>練團、排舞、辦活動都可以。線上就能看空檔、挑整點時段送出申請，我們確認後再跟你聯絡。</p>
     </div>
-    <div class="grid">
-      <div class="card">
-        <h3>大教室</h3>
-        <ul class="rows"><li><span class="lbl">每小時</span><span class="val">$1,000</span></li></ul>
-      </div>
-      <div class="card">
-        <h3>中教室</h3>
-        <ul class="rows"><li><span class="lbl">每小時</span><span class="val">$800</span></li></ul>
-      </div>
-      <div class="card">
-        <h3>小教室</h3>
-        <ul class="rows"><li><span class="lbl">每小時</span><span class="val">$500</span></li></ul>
-      </div>
+    <div class="grid" id="roomGrid" aria-live="polite">
+      <p class="rest" id="roomMsg">正在取得最新租金…</p>
     </div>
-    <p class="note">需要長期配合或包時段，歡迎私訊洽詢。</p>
+    <p class="note">租借時段包含場佈與撤場時間。需要長期配合或包時段，歡迎私訊洽詢。</p>
   </div>
 </section>
 
@@ -496,8 +485,10 @@ copyBtn.addEventListener('click', function(){
           + 'Al2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec?api=prices';
   var BOOK = 'https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2q'
            + 'Al2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec';
+  var RENT = BOOK + '?view=rent';
   var grid = document.getElementById('feeGrid');
-  if (!grid) return;
+  var rgrid = document.getElementById('roomGrid');
+  if (!grid && !rgrid) return;
 
   function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -505,6 +496,9 @@ copyBtn.addEventListener('click', function(){
   /* 同一類別有好幾堂、價格不同時顯示成區間 */
   function range(lo, hi){ return lo === hi ? money(lo) : money(lo) + '–' + Number(hi).toLocaleString('en-US'); }
   function rows(list){ return '<ul class="rows">' + list.join('') + '</ul>'; }
+  /* 試算表裡可能存成 9:00，補成 09:00 再顯示，這樣幾間教室排在一起才對得齊 */
+  function hm(t){ var m = /^(\d{1,2}):(\d{2})/.exec(String(t||''));
+                  return m ? ('0' + m[1]).slice(-2) + ':' + m[2] : String(t||''); }
   function row(lbl, sub, val){
     return '<li><span class="lbl">' + esc(lbl) +
            (sub ? '<i>' + esc(sub) + '</i>' : '') +
@@ -517,10 +511,30 @@ copyBtn.addEventListener('click', function(){
       '<p class="sub">' + esc(sub) + '</p>' + body +
       (note ? '<p class="note">' + esc(note) + '</p>' : '') + '</div>';
   }
-  function bail(){
-    grid.innerHTML = '<p class="rest">目前拿不到最新費用。' +
+  function fbail(){
+    if (grid) grid.innerHTML = '<p class="rest">目前拿不到最新費用。' +
       '請到<a href="' + BOOK + '">課程查詢及線上報名</a>頁查看，' +
       '上面的金額一定是最新的。</p>';
+  }
+  /* 整包都抓不到的時候兩段一起收。
+     只有課程那段沒資料時不要連租金也擦掉，所以分成兩支。 */
+  function bail(){ fbail(); rbail(); }
+  /* 租金也是寧可叫人點進租借頁，也不要顯示過期的數字或 0 元 */
+  function rbail(){
+    if (rgrid) rgrid.innerHTML = '<p class="rest">目前拿不到最新租金。' +
+      '請到<a href="' + RENT + '">教室租借</a>頁查看空檔與金額。</p>';
+  }
+  function rooms(list){
+    if (!rgrid) return;
+    if (!list.length) return rbail();
+    rgrid.innerHTML = list.map(function(r){
+      return '<div class="card"><h3>' + esc(r.room) + '</h3>' +
+        rows([ row('每小時', '', r.rate > 0 ? money(r.rate) : '請洽詢'),
+               row('開放時段', '', esc(hm(r.open)) + '–' + esc(hm(r.close))) ]) +
+        '</div>';
+    }).join('') +
+    '<p class="rest" style="grid-column:1/-1;padding:4px 4px 0">' +
+      '<a href="' + RENT + '">看空檔並申請租借</a></p>';
   }
 
   fetch(API).then(function(r){
@@ -561,8 +575,10 @@ copyBtn.addEventListener('click', function(){
         '限本人使用，不能借給親友。'));
     }
 
-    if (!out.length) return bail();
-    grid.innerHTML = out.join('');
+    rooms(d.rooms || []);
+
+    if (!out.length) return fbail();
+    if (grid) grid.innerHTML = out.join('');
   }).catch(bail);
 })();
 </script>
