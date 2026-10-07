@@ -124,6 +124,17 @@ section.alt{background:var(--pink-wash)}
 
 /* ---------- 價目 ---------- */
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+/* 費用區有四張卡。用 auto-fit 會排成 3＋1，最後一張落單很難看，
+   所以電腦版固定兩欄兩列；窄螢幕交給上面那行自動變成單欄。 */
+/* align-items:start 讓每張卡只佔自己內容的高度。不加的話短的那張會被拉長到
+   和旁邊一樣高，下半部空一大塊，看起來像漏掉東西。 */
+@media (min-width:760px){ #fees .grid{grid-template-columns:repeat(2,1fr);align-items:start} }
+/* 「再送 N 點」接在點數後面的小字，不搶走價格的注意力 */
+.rows .lbl i{
+  display:block;font-style:normal;font-size:13px;color:var(--gold-deep);
+  font-weight:700;margin-top:1px;
+}
+.card .note{margin-top:18px;font-size:13.5px;line-height:1.65}
 .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 24px}
 .card h3{font-size:19px;font-weight:700;margin-bottom:4px}
 .card .sub{font-size:14px;color:var(--muted);margin:0 0 18px}
@@ -272,7 +283,7 @@ footer ul{list-style:none;margin:0;padding:0}
   <div class="wrap">
     <div class="shead">
       <h2>課程費用</h2>
-      <p>整期報名每堂比單堂便宜，期課另有早鳥優惠。</p>
+      <p>整期報名每堂比單堂便宜，期課另有早鳥優惠。另有限量與季節性方案，開放時會出現在報名頁。</p>
     </div>
     <div class="grid">
       <div class="card">
@@ -295,11 +306,23 @@ footer ul{list-style:none;margin:0;padding:0}
       </div>
       <div class="card feature">
         <span class="tag">最彈性</span>
-        <h3>成人自由選點數卡</h3>
-        <p class="sub">1 點 = 1 堂，課程自己挑</p>
+        <h3>點數卡</h3>
+        <p class="sub">1 點上 1 堂，課程自己挑，買越多送越多</p>
         <ul class="rows">
-          <li><span class="lbl">5 點課程卡</span><span class="val">$1,150</span></li>
+          <li><span class="lbl">5 點<i>再送 1 點</i></span><span class="val">$1,150</span></li>
+          <li><span class="lbl">10 點<i>再送 3 點</i></span><span class="val">$2,200</span></li>
+          <li><span class="lbl">20 點<i>再送 8 點</i></span><span class="val">$4,100</span></li>
         </ul>
+        <p class="note">自取卡日起 180 天內有效。贈送的點數會留到最後才扣，買的先用。</p>
+      </div>
+      <div class="card">
+        <h3>無限卡</h3>
+        <p class="sub">效期內上課不限次數，排得進就能上</p>
+        <ul class="rows">
+          <li><span class="lbl">30 天</span><span class="val">$2,000</span></li>
+          <li><span class="lbl">180 天</span><span class="val">$10,000</span></li>
+        </ul>
+        <p class="note">可上單堂定價 250 元以內的課程。限本人使用，不能借給親友。</p>
       </div>
     </div>
   </div>
