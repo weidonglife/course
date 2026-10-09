@@ -74,30 +74,42 @@ a{color:var(--pink-deep)}
 .hero{display:grid;gap:26px;align-items:start}
 
 /* 圖章原圖只有 180px 見方，所以不能放太大——放到 124px 以內，
-   在兩倍螢幕上才還是銳利的。反正它現在只是一個記號，不用佔整個右半邊。 */
+   在兩倍螢幕上才還是銳利的。反正它現在只是一個記號，不用佔整個右半邊。
+
+   動畫分三層疊起來，因為三個動作都要改 transform，
+   擠在同一個元素上後面的會把前面的整個蓋掉：
+     .hmark  上下浮
+     .hsway  左右擺
+     .hlogo  進場轉一圈（只做這一次） */
 .hmark{position:relative;width:clamp(92px,12vw,124px);aspect-ratio:1;
-       animation:markFloat 6.5s ease-in-out 1s infinite}
-/* 後面那圈光暈會慢慢一呼一吸，讓這個記號看起來是活的。
-   刻意放慢到六秒半：旁邊就是四顆要按的按鈕，動得太快會把眼睛拉走。 */
+       animation:markFloat 5s ease-in-out 1.2s infinite}
+/* 後面那圈光暈跟著一起一呼一吸，擺到最旁邊的時候最亮 */
 .hmark::before{
-  content:"";position:absolute;inset:-20%;border-radius:50%;z-index:0;
+  content:"";position:absolute;inset:-24%;border-radius:50%;z-index:0;
   background:radial-gradient(circle,var(--glow) 0%,transparent 68%);
-  animation:markGlow 6.5s ease-in-out infinite;
+  animation:markGlow 5s ease-in-out infinite;
 }
-/* 進場轉一下再停住——跳舞的教室，記號自己先轉個身。只做這一次。 */
+.hsway{display:block;animation:markSway 5s ease-in-out 1.2s infinite}
+/* 進場先轉一整圈再停住——跳舞的教室，記號自己先轉個身。只做這一次。 */
 .hlogo{position:relative;z-index:1;display:block;width:100%;height:auto;
-       animation:markIn .9s cubic-bezier(.22,1,.36,1) both}
+       animation:markIn 1.2s cubic-bezier(.34,1.26,.5,1) both}
 @keyframes markIn{
-  from{opacity:0;transform:scale(.86) rotate(-12deg)}
+  from{opacity:0;transform:scale(.6) rotate(-360deg)}
   to  {opacity:1;transform:scale(1) rotate(0)}
 }
+/* 浮和擺同一個週期：往右擺的時候同時升起來，走的是一道弧線，
+   不是上下直上直下——這樣才像在晃，不像在跳 */
 @keyframes markFloat{
   0%,100%{transform:translateY(0)}
-  50%    {transform:translateY(-5px)}
+  50%    {transform:translateY(-9px)}
+}
+@keyframes markSway{
+  0%,100%{transform:rotate(-7deg)}
+  50%    {transform:rotate(7deg)}
 }
 @keyframes markGlow{
-  0%,100%{opacity:.5;transform:scale(.92)}
-  50%    {opacity:1; transform:scale(1.08)}
+  0%,100%{opacity:.35;transform:scale(.86)}
+  50%    {opacity:1;  transform:scale(1.16)}
 }
 @media (min-width:900px){
   /* 文字一欄、圖章一欄。圖章在原始碼裡排在前面（手機要在最上面），
@@ -285,10 +297,10 @@ footer ul{list-style:none;margin:0;padding:0}
   <div class="wrap hero">
     <!-- LOGO 擺在標題前面，是為了手機：一欄排的時候它要在最上面。
          寬螢幕再用 order 把它換到右邊那一欄。 -->
-    <div class="hmark">
+    <div class="hmark"><span class="hsway">
       <img class="hlogo" src="icon-180.png" width="180" height="180"
            alt="微動身活共享舞蹈空間" fetchpriority="high">
-    </div>
+    </span></div>
     <div class="hcopy">
     <h1>微動身活</h1>
     <p class="lede">在緊湊的日常裡，給自己一段專屬的時間。有氧、瑜珈、Kpop、兒童課程，一個人來或全家一起來都可以。</p>
