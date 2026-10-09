@@ -20,6 +20,8 @@
   --ink:#4A3540; --muted:#8E7280;
   /* LOGO 的金字和白色線條只有在淺底上看得清楚，所以品牌列單獨留一個夠亮的底色 */
   --plate:#FFFFFF;
+  /* 頁首圖章後面那圈會呼吸的光暈。深淺色各一個值，不然深色底上會糊成一團 */
+  --glow:rgba(224,86,143,.30);
   --display:'Quicksand',"Noto Sans TC",system-ui,sans-serif;
   --body:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
@@ -31,6 +33,7 @@
     --ink:#F6E9EE; --muted:#B8A0AC;
     /* 深色模式下不用純白，太刺眼；調成帶一點粉的米白，LOGO 一樣看得清楚 */
     --plate:#F4EAEF;
+    --glow:rgba(240,140,180,.34);
     color-scheme:dark;
   }
 }
@@ -39,6 +42,7 @@
   --gold:#D9BC8C; --gold-deep:#E8D2A8; --gold-wash:#2C2419;
   --paper:#1B1116; --card:#241820; --line:#3A2630;
   --ink:#F6E9EE; --muted:#B8A0AC;
+  --glow:rgba(240,140,180,.34);
   color-scheme:dark;
 }
 
@@ -55,9 +59,12 @@ a{color:var(--pink-deep)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* ---------- 頁首 ----------
-   LOGO 自己就寫著「WEI DONG · 微動身活共享舞蹈空間」，所以頁首沒有再放一行同樣內容的小標。
-   原本 LOGO 單獨佔一條淺色的品牌列，現在搬進頁首右邊跟大標並排——
-   那半邊本來是空的，右邊有東西，整塊才站得住。
+   頁首右邊只放圖章，不放字。
+
+   原本那張寬版 LOGO 把「WEI DONG · 微動身活共享舞蹈空間」也畫進圖裡，
+   那些字只有 600px 寬的點陣，放大就糊掉。教室的名字左邊的大標已經寫了，
+   右邊再寫一次本來就是重複的——拿掉字，剩下的圖章反而站得更穩。
+
    LOGO 的背景是透明的，所以深色底直接壓得上去，不用再墊一層淺色。 */
 .top{
   background:linear-gradient(165deg,var(--pink-wash) 0%,var(--pink-soft) 100%);
@@ -65,13 +72,39 @@ a{color:var(--pink-deep)}
 }
 .top .wrap{padding-block:52px 44px}
 .hero{display:grid;gap:26px;align-items:start}
-.hlogo{display:block;width:clamp(240px,40vw,300px);height:auto}
+
+/* 圖章原圖只有 180px 見方，所以不能放太大——放到 124px 以內，
+   在兩倍螢幕上才還是銳利的。反正它現在只是一個記號，不用佔整個右半邊。 */
+.hmark{position:relative;width:clamp(92px,12vw,124px);aspect-ratio:1;
+       animation:markFloat 6.5s ease-in-out 1s infinite}
+/* 後面那圈光暈會慢慢一呼一吸，讓這個記號看起來是活的。
+   刻意放慢到六秒半：旁邊就是四顆要按的按鈕，動得太快會把眼睛拉走。 */
+.hmark::before{
+  content:"";position:absolute;inset:-20%;border-radius:50%;z-index:0;
+  background:radial-gradient(circle,var(--glow) 0%,transparent 68%);
+  animation:markGlow 6.5s ease-in-out infinite;
+}
+/* 進場轉一下再停住——跳舞的教室，記號自己先轉個身。只做這一次。 */
+.hlogo{position:relative;z-index:1;display:block;width:100%;height:auto;
+       animation:markIn .9s cubic-bezier(.22,1,.36,1) both}
+@keyframes markIn{
+  from{opacity:0;transform:scale(.86) rotate(-12deg)}
+  to  {opacity:1;transform:scale(1) rotate(0)}
+}
+@keyframes markFloat{
+  0%,100%{transform:translateY(0)}
+  50%    {transform:translateY(-5px)}
+}
+@keyframes markGlow{
+  0%,100%{opacity:.5;transform:scale(.92)}
+  50%    {opacity:1; transform:scale(1.08)}
+}
 @media (min-width:900px){
-  /* 文字一欄、LOGO 一欄。LOGO 在原始碼裡排在前面（手機要在最上面），
+  /* 文字一欄、圖章一欄。圖章在原始碼裡排在前面（手機要在最上面），
      這裡用 order 把它丟到右邊那一欄去。 */
   .hero{grid-template-columns:minmax(0,1fr) auto;gap:44px}
   .hcopy{order:1;min-width:0}
-  .hlogo{order:2;margin-top:6px}
+  .hmark{order:2;margin-top:10px}
 }
 .eyebrow{
   font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.32em;
@@ -252,7 +285,10 @@ footer ul{list-style:none;margin:0;padding:0}
   <div class="wrap hero">
     <!-- LOGO 擺在標題前面，是為了手機：一欄排的時候它要在最上面。
          寬螢幕再用 order 把它換到右邊那一欄。 -->
-    <img class="hlogo" src="logo-wide.png" width="600" height="155" alt="微動身活共享舞蹈空間">
+    <div class="hmark">
+      <img class="hlogo" src="icon-180.png" width="180" height="180"
+           alt="微動身活共享舞蹈空間" fetchpriority="high">
+    </div>
     <div class="hcopy">
     <h1>微動身活</h1>
     <p class="lede">在緊湊的日常裡，給自己一段專屬的時間。有氧、瑜珈、Kpop、兒童課程，一個人來或全家一起來都可以。</p>
