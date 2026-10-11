@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="微動身活 教室公休查詢 — 國定假日、整修、颱風假等不營業的日期，一次看清楚。">
+<title>教室公休查詢｜微動身活</title>
+<link rel="icon" href="icon-180.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 這一頁只做一件事：把後台設的公休日列清楚。資料來源跟首頁一樣是報名系統，
+   這裡不手打任何日期——手打的話後台改了這裡不會跟著改。
+   色票跟首頁同一套，直接複製過來，兩頁看起來才是同一家店。 */
+:root{
+  --pink:#E0568F; --pink-deep:#C43D74; --pink-soft:#F7D4E2; --pink-wash:#FDF0F5;
+  --gold:#C9A876; --gold-deep:#9E7434; --gold-wash:#FBF2E2;
+  --paper:#FFFBFC; --card:#FFFFFF; --line:#F0DCE5;
+  --ink:#4A3540; --muted:#8E7280;
+  --display:'Quicksand',"Noto Sans TC",system-ui,sans-serif;
+  --body:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --pink:#F08CB4; --pink-deep:#F7B3CF; --pink-soft:#53303F; --pink-wash:#2E1C24;
+    --gold:#D9BC8C; --gold-deep:#E8D2A8; --gold-wash:#2C2419;
+    --paper:#1B1116; --card:#241820; --line:#3A2630;
+    --ink:#F6E9EE; --muted:#B8A0AC;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --pink:#F08CB4; --pink-deep:#F7B3CF; --pink-soft:#53303F; --pink-wash:#2E1C24;
+  --gold:#D9BC8C; --gold-deep:#E8D2A8; --gold-wash:#2C2419;
+  --paper:#1B1116; --card:#241820; --line:#3A2630;
+  --ink:#F6E9EE; --muted:#B8A0AC;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance}
+a{color:var(--pink-deep)}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.wrap{max-width:720px;margin:0 auto;padding-inline:20px}
+
+/* 頁首：小小一條，給人知道還在同一個網站、一鍵回首頁 */
+.top{border-bottom:1px solid var(--line);background:var(--card)}
+.top .wrap{display:flex;align-items:center;gap:12px;padding-block:12px}
+.top img{width:40px;height:40px;border-radius:50%}
+.top b{font-family:var(--display);font-size:17px}
+.top a.home{margin-left:auto;font-size:14px;text-decoration:none;font-weight:700}
+
+main .wrap{padding-block:34px 60px}
+h1{font-size:clamp(26px,5vw,34px)}
+.lede{color:var(--muted);margin:8px 0 0;font-size:15.5px}
+
+/* 最上面一條：今天是不是公休。租借的人和臨時想來的人最先想知道的就是這個 */
+.today{
+  margin-top:22px;padding:14px 18px;border-radius:14px;
+  background:var(--pink-wash);border:1px solid var(--line);font-size:15.5px;
+}
+.today b{font-family:var(--display)}
+.today.off{background:var(--gold-wash);border-color:var(--gold)}
+.today.off b{color:var(--gold-deep)}
+
+/* 月份標題＋每一天一列。日期用大字、靠左對齊成一欄，掃一眼就能找到自己要的那天 */
+.month{margin-top:30px}
+.month h2{font-size:15px;color:var(--muted);font-weight:600;letter-spacing:.02em;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.day{
+  display:grid;grid-template-columns:76px 1fr;gap:0 16px;align-items:center;
+  padding:14px 4px;border-bottom:1px solid var(--line);
+}
+.day .d{font-family:var(--display);font-size:28px;font-weight:700;color:var(--gold-deep);line-height:1;font-variant-numeric:tabular-nums}
+.day .d small{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-top:4px}
+.day .why{font-size:17px;font-weight:700}
+.day .why span{display:block;font-size:14px;font-weight:400;color:var(--muted);margin-top:2px}
+.day.soon .d{color:var(--pink-deep)}
+.day.past{opacity:.45}
+
+.rest{color:var(--muted);padding:40px 4px;text-align:center;font-size:16px}
+.rest b{display:block;font-family:var(--display);font-size:22px;color:var(--ink);margin-bottom:6px}
+
+.note{margin-top:34px;font-size:14px;color:var(--muted);border-left:3px solid var(--gold);padding-left:14px}
+.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{
+  display:inline-flex;align-items:center;border:0;cursor:pointer;
+  font-family:var(--display);font-weight:700;font-size:15px;
+  padding:12px 22px;border-radius:999px;text-decoration:none;
+  background:var(--pink);color:#fff;
+}
+.btn.gold{background:var(--gold-wash);color:var(--gold-deep);border:2px solid var(--gold)}
+.btn.ghost{background:var(--card);color:var(--pink-deep);border:2px solid var(--pink-soft)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <img src="icon-180.png" width="40" height="40" alt="">
+    <b>微動身活</b>
+    <a class="home" href="./">← 回首頁</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h1>教室公休查詢</h1>
+    <p class="lede">國定假日、教室整修、颱風假等不營業的日期。公休日不上課，教室也不開放租借。</p>
+
+    <div class="today" id="today" hidden></div>
+    <div id="list"><p class="rest">正在讀取公休日…</p></div>
+
+    <p class="note">這裡的日期直接來自教室的排課系統，跟報名頁、租借頁用的是同一份，隨時都是最新的。臨時公休（例如颱風）會在決定後立刻出現在這裡。</p>
+
+    <div class="links">
+      <a class="btn" href="https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2qAl2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec">看課表並報名</a>
+      <a class="btn gold" href="https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2qAl2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec?view=rent">教室租借</a>
+      <a class="btn ghost" href="./">回首頁</a>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var API = 'https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2q'
+          + 'Al2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec?api=closed';
+  var list = document.getElementById('list');
+  var todayBox = document.getElementById('today');
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function p2(n){ return ('0' + n).slice(-2); }
+  function ymd(d){ return d.getFullYear() + '-' + p2(d.getMonth()+1) + '-' + p2(d.getDate()); }
+
+  function bail(){
+    list.innerHTML = '<p class="rest"><b>目前讀不到公休日</b>請稍後再試，或直接到'
+      + '<a href="https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2qAl2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec">課表</a>看——公休那天會標出來。</p>';
+  }
+
+  function render(days){
+    var now = new Date(), today = ymd(now);
+    var week = ymd(new Date(now.getFullYear(), now.getMonth(), now.getDate() + 7));
+    days = (days || []).filter(function(c){ return c && /^\d{4}-\d{2}-\d{2}$/.test(c.day); })
+                       .sort(function(a, b){ return a.day < b.day ? -1 : 1; });
+
+    /* 今天那一條 */
+    var t = days.filter(function(c){ return c.day === today; })[0];
+    todayBox.hidden = false;
+    if (t) {
+      todayBox.className = 'today off';
+      todayBox.innerHTML = '<b>今天公休</b>' + (t.why ? '　' + esc(t.why) : '') + '，教室沒有營業。';
+    } else {
+      todayBox.className = 'today';
+      todayBox.innerHTML = '<b>今天正常營業</b>　' + esc(today.slice(5).replace('-', '/')) + '（' + weekday(now) + '）';
+    }
+
+    var up = days.filter(function(c){ return c.day >= today; });
+    if (!up.length) {
+      list.innerHTML = '<p class="rest"><b>近半年沒有排定的公休日</b>每天都照常營業。臨時公休會第一時間更新在這裡。</p>';
+      return;
+    }
+
+    var h = '', lastM = '';
+    up.forEach(function(c){
+      var m = c.day.slice(0, 7);
+      if (m !== lastM) {
+        if (lastM) h += '</div>';
+        h += '<div class="month"><h2>' + Number(m.slice(0, 4)) + ' 年 ' + Number(m.slice(5)) + ' 月</h2>';
+        lastM = m;
+      }
+      var cls = 'day' + (c.day <= week ? ' soon' : '');
+      var when = c.day === today ? '今天' : (c.dow || '');
+      h += '<div class="' + cls + '">'
+         + '<div class="d">' + Number(c.day.slice(8)) + '<small>' + esc(when) + '</small></div>'
+         + '<div class="why">' + (c.why ? esc(c.why) : '教室公休')
+         + '<span>' + (c.why ? '教室公休' : '不上課、不開放租借') + '</span></div>'
+         + '</div>';
+    });
+    h += '</div>';
+    list.innerHTML = h;
+  }
+  function weekday(d){ return ['週日','週一','週二','週三','週四','週五','週六'][d.getDay()]; }
+
+  fetch(API).then(function(r){
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }).then(function(d){
+    if (!d || !Array.isArray(d.closed)) throw new Error('格式不對');
+    render(d.closed);
+  }).catch(bail);
+})();
+</script>
+</body>
+</html>

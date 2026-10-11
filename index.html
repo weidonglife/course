@@ -326,6 +326,9 @@ footer ul{list-style:none;margin:0;padding:0}
       <a class="btn ghost" href="https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2qAl2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec?view=leave">線上請假</a>
       <!-- 企業包班是給公司行政看的，不是給學生，所以排最後、用安靜的樣式 -->
       <a class="btn ghost" href="https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2qAl2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec?view=corp">企業包班</a>
+      <!-- 公休查詢：學生和租借的人都要看，放在最後一顆。用金色跟「教室租借」同一家族——
+           這兩顆都是「營業相關」而不是報名動作 -->
+      <a class="btn gold" href="closed.html">教室公休查詢</a>
       <!-- 「用 LINE 報名」暫停中。要恢復的話，把下面這一行的註解符號拿掉即可。
       <a class="btn ghost" href="https://line.me/ti/p/@843qpnet">用 LINE 報名</a>
       -->
@@ -605,7 +608,7 @@ copyBtn.addEventListener('click', function(){
       var md = m ? Number(m[1]) + '/' + Number(m[2]) : c.day;
       return '<li><b>' + esc(md) + (c.dow ? '（' + esc(c.dow) + '）' : '') + '</b>' +
              (c.why ? '<span>' + esc(c.why) + '</span>' : '') + '</li>';
-    }).join('') + '</ul><p>公休日不上課，教室也不開放租借。</p>';
+    }).join('') + '</ul><p>公休日不上課，教室也不開放租借。<a href="closed.html">看完整公休日列表</a></p>';
     box.hidden = false;
   }
   function rooms(list){
