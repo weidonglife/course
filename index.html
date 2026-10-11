@@ -168,6 +168,18 @@ section.alt{background:var(--pink-wash)}
 .slot .n{font-size:19px;font-weight:700;line-height:1.35}
 .slot .c{font-size:15px;color:var(--muted);margin-top:2px}
 .rest{color:var(--muted);padding:28px 4px;font-size:16px}
+/* 近期公休：只有後台設了公休日才出現，平常這塊是藏起來的。
+   用金色做邊，跟粉色的課卡分開——這是「提醒」不是「課」。 */
+.closed{
+  margin-top:8px;background:var(--gold-wash);border:1px solid var(--gold);
+  border-radius:18px;padding:18px 22px;
+}
+.closed h3{margin:0 0 10px;font-family:var(--display);font-size:18px;color:var(--gold-deep)}
+.closed ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.closed li{display:flex;gap:12px;align-items:baseline;font-size:16px}
+.closed li b{font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.closed li span{color:var(--muted)}
+.closed p{margin:12px 0 0;font-size:14px;color:var(--muted)}
 .note{
   margin-top:20px;font-size:14px;color:var(--muted);
   border-left:3px solid var(--gold);padding-left:14px;
@@ -330,6 +342,8 @@ footer ul{list-style:none;margin:0;padding:0}
     </div>
     <div class="slots">
       <p class="rest">最新課表都在<a href="https://script.google.com/macros/s/AKfycbzihfBUkfsXvJCQiK3JX2qAl2vcKIuYBOEAthzjSGlCkGbbLbJBGFCbYSiApsSsuxvLEA/exec">課程查詢及線上報名</a>頁，未來兩個月每一堂課的時間、老師與<b>剩餘名額</b>都看得到，也可以直接在上面報名。</p>
+      <!-- 公休日由後台「教練調停課 → 整天公休」設定，這裡自動跟著出現；沒有公休就整塊藏著 -->
+      <div class="closed" id="closedBox" hidden></div>
     </div>
   </div>
 </section>
@@ -579,6 +593,21 @@ copyBtn.addEventListener('click', function(){
     if (rgrid) rgrid.innerHTML = '<p class="rest">目前拿不到最新租金。' +
       '請到<a href="' + RENT + '">教室租借</a>頁查看空檔與金額。</p>';
   }
+  /* 近期公休：後台設的公休日（國定假日、整修、颱風假）。
+     沒有就維持隱藏，不要放一個「目前無公休」的空殼佔版面。 */
+  function closed(list){
+    var box = document.getElementById('closedBox');
+    if (!box) return;
+    list = (list || []).filter(function(c){ return c && c.day; });
+    if (!list.length) { box.hidden = true; return; }
+    box.innerHTML = '<h3>近期公休</h3><ul>' + list.map(function(c){
+      var m = /^\d{4}-(\d{2})-(\d{2})$/.exec(c.day);
+      var md = m ? Number(m[1]) + '/' + Number(m[2]) : c.day;
+      return '<li><b>' + esc(md) + (c.dow ? '（' + esc(c.dow) + '）' : '') + '</b>' +
+             (c.why ? '<span>' + esc(c.why) + '</span>' : '') + '</li>';
+    }).join('') + '</ul><p>公休日不上課，教室也不開放租借。</p>';
+    box.hidden = false;
+  }
   function rooms(list){
     if (!rgrid) return;
     if (!list.length) return rbail();
@@ -631,6 +660,7 @@ copyBtn.addEventListener('click', function(){
     }
 
     rooms(d.rooms || []);
+    closed(d.closed || []);
 
     if (!out.length) return fbail();
     if (grid) grid.innerHTML = out.join('');
