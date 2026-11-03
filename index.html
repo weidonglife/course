@@ -369,24 +369,16 @@ footer ul{list-style:none;margin:0;padding:0}
   <div class="wrap">
     <div class="shead">
       <h2>怎麼報名</h2>
-      <p>名額保留 24 小時，匯款後填上帳號末 5 碼，教室確認收款就完成報名。</p>
+      <p>線上選課、線上轉帳，入帳後自動完成報名，不用回報、不用等人工確認。</p>
     </div>
     <ol class="steps">
-      <li><b>線上選課報名</b><span>到「課程查詢及線上報名」頁挑好日期與班別，填姓名和手機送出即可，會即時顯示剩餘名額。</span></li>
-      <li><b>24 小時內匯款</b><span>送出後畫面會顯示匯款資訊，有點數卡的話系統會直接扣點、不用匯款。逾期名額會自動釋出。</span></li>
-      <li><b>填匯款末 5 碼</b><span>匯好就在同一個畫面填帳號末 5 碼，打滿自動送出；當下沒填，之後到「查詢及請假」用手機號碼查到那一筆再補填。教室確認收款後，報名狀態會變成「已繳費」，買點數卡的點數也會自動入帳。</span></li>
-      <li><b>到「查詢及請假」確認</b><span>用手機號碼就查得到自己報了哪些課、點數剩幾點。開課前 24 小時以前可以自己請假（換一次補課額度）或取消；請假後要銷假請聯絡教室。</span></li>
+      <li><b>線上選課報名</b><span>到「課程查詢及線上報名」頁挑好日期與班別，填姓名和手機送出即可，會即時顯示剩餘名額。有點數卡的話系統會直接扣點、不用付款。</span></li>
+      <li><b>選付款方式</b><span>報名完成的畫面會問「這筆要怎麼付？」。<b>線上轉帳</b>：系統給你一組專屬匯款帳號（由綠界科技代收），用網銀或 ATM 轉帳，金額要剛好。<b>現金</b>：到教室時繳給櫃檯。</span></li>
+      <li><b>入帳後自動完成</b><span>轉帳通常十分鐘內入帳，報名會自動變成「已繳費」，不用回報、也不用填末 5 碼。名額保留 3 天，期限內沒有入帳會自動釋出。</span></li>
+      <li><b>到「查詢及請假」確認</b><span>用手機號碼就查得到自己報了哪些課、點數剩幾點，還沒付的那一筆也看得到專屬帳號。開課前 24 小時以前可以自己請假（換一次補課額度）或取消；請假後要銷假請聯絡教室。</span></li>
     </ol>
-    <div class="bank">
-      <!-- 匯款資訊由 JS 從報名系統的「系統設定」讀，不要在這裡手打：
-           試算表改了帳號，這裡不會跟著改，學生就會看到兩個帳號。 -->
-      <div class="row">
-        <div><div class="k">銀行代碼</div><div class="v" id="bankName">—</div></div>
-        <div><div class="k">帳號</div><div class="v" id="acct">報名後畫面會顯示</div></div>
-      </div>
-      <button class="copy" id="copyBtn" type="button" hidden>複製帳號</button>
-    </div>
-    <div class="warn"><b>提醒</b>：我們的通知信不會包含任何連結或銀行帳號。收到這類訊息請先聯繫官方 LINE 確認。</div>
+    <!-- 這裡刻意不放固定的銀行帳號：每一筆報名的專屬帳號都不一樣，寫了反而會有人轉錯。 -->
+    <div class="warn"><b>提醒</b>：轉帳時收款方會顯示「唯修科技」，那是微動身活的公司名稱，不是轉錯。我們不會另外用訊息傳帳號或連結給你，專屬匯款帳號只會出現在報名完成的畫面和「查詢及請假」裡；收到其他來源的帳號請先透過官方 LINE 確認。</div>
   </div>
 </section>
 
@@ -421,8 +413,8 @@ footer ul{list-style:none;margin:0;padding:0}
       <div class="body">
         <h4>報名與繳費</h4>
         <ul>
-          <li>名額保留 24 小時，請完成匯款並在報名網頁填上帳號末 5 碼。</li>
-          <li>教室確認收款後，「查詢及請假」裡那一筆會變成「已繳費」，這樣才算完成報名；有疑問可以用 LINE 問我們。</li>
+          <li>報名後請在 3 天內完成付款：線上轉帳到系統給的專屬帳號（金額要剛好），或到教室繳現金。</li>
+          <li>轉帳入帳後「查詢及請假」裡那一筆會自動變成「已繳費」，這樣才算完成報名；現金則由櫃檯收款後確認。有疑問可以用 LINE 問我們。</li>
           <li>開班人數：有氧／瑜珈滿 4 人、兒童課滿 3 人。</li>
         </ul>
         <h4>上課規範</h4>
@@ -473,13 +465,13 @@ footer ul{list-style:none;margin:0;padding:0}
           <li>1 點 = 1 堂課，可自由選擇適用課程。</li>
           <li>課程採預約制，依各班剩餘名額開放。</li>
           <li><b>報名當下就扣 1 點</b>，線上即時完成，不需另外集點。</li>
-          <li>效期依各方案標示（購買頁上看得到），從<b>教室確認收款那一天</b>起算，逾期未用完的點數失效。</li>
+          <li>效期依各方案標示（購買頁上看得到），從<b>入帳（或櫃檯收到現金）那一天</b>起算，逾期未用完的點數失效。</li>
           <li>報名後要取消，請於開課 <b>24 小時前</b>在「查詢及請假」線上取消，點數會<b>原數退回</b>；24 小時內線上就不開放，請聯絡教室。</li>
           <li>一般點數卡<b>可以幫親友扣點</b>，但請到櫃檯辦理，線上報名無法指定別人的卡。<b>無限卡限本人使用</b>，不能借給親友。</li>
           <li>點數一律不得兌換現金或與其他優惠併用。</li>
           <li>特殊課程、工作坊及指定課程不適用，依教室公告為準。</li>
         </ul>
-        <div class="warn">匯款完成後在購買畫面填帳號末 5 碼，教室確認收款後點數自動入帳，到「查詢及請假」就看得到。</div>
+        <div class="warn">購買後選「線上轉帳」，用系統給的專屬帳號轉帳，入帳後卡自動生效、點數自動入帳，到「查詢及請假」就看得到；選現金的話到教室繳款後生效。</div>
       </div>
     </details>
   </div>
@@ -534,23 +526,6 @@ footer ul{list-style:none;margin:0;padding:0}
 </footer>
 
 <script>
-var copyBtn = document.getElementById('copyBtn');
-copyBtn.addEventListener('click', function(){
-  var txt = document.getElementById('acct').textContent.trim();
-  var done = function(){ copyBtn.textContent = '已複製'; setTimeout(function(){ copyBtn.textContent = '複製帳號'; }, 1800); };
-  try {
-    navigator.clipboard.writeText(txt).then(done, select);
-  } catch (e) { select(); }
-  function select(){
-    var r = document.createRange();
-    r.selectNodeContents(document.getElementById('acct'));
-    var sel = window.getSelection();
-    sel.removeAllRanges(); sel.addRange(r);
-    copyBtn.textContent = '請手動複製';
-    setTimeout(function(){ copyBtn.textContent = '複製帳號'; }, 2400);
-  }
-});
-
 /* ---------- 課程費用：跟報名系統拿，不要寫死在網頁裡 ----------
    價格只有一個來源：教室的 Google 試算表。這裡抓的網址只會吐價目表，
    不含任何學員資料。抓不到的時候寧可叫人去報名頁看，也不要顯示過期的數字。 */
@@ -613,14 +588,6 @@ copyBtn.addEventListener('click', function(){
     }).join('') + '</ul><p>公休日不上課，教室也不開放租借。<a href="closed.html">看完整公休日列表</a></p>';
     box.hidden = false;
   }
-  /* 匯款資訊：從系統設定來。沒填就維持「報名後畫面會顯示」，複製鍵藏著 */
-  function bank(b){
-    var nm = document.getElementById('bankName'), ac = document.getElementById('acct'), cp = document.getElementById('copyBtn');
-    if (!b || !b.acct) return;
-    if (nm) nm.textContent = b.name || '—';
-    if (ac) ac.textContent = b.acct;
-    if (cp) cp.hidden = false;
-  }
   function rooms(list){
     if (!rgrid) return;
     if (!list.length) return rbail();
@@ -659,7 +626,7 @@ copyBtn.addEventListener('click', function(){
       });
     if (pt.length) out.push(card('feature', '最彈性', '點數卡',
       '1 點上 1 堂，課程自己挑，買越多送越多', rows(pt),
-      '從教室確認收款那天起 ' + (d.days || 90) + ' 天內有效（各方案可能不同，以購買頁標示為準）。贈送的點數會留到最後才扣，買的先用。'));
+      '從入帳那天起 ' + (d.days || 90) + ' 天內有效（各方案可能不同，以購買頁標示為準）。贈送的點數會留到最後才扣，買的先用。'));
 
     var fr = (d.free || []).filter(function(p){ return !p.soldOut; });
     if (fr.length) {
@@ -674,7 +641,6 @@ copyBtn.addEventListener('click', function(){
 
     rooms(d.rooms || []);
     closed(d.closed || []);
-    bank(d.bank || null);
 
     if (!out.length) return fbail();
     if (grid) grid.innerHTML = out.join('');
